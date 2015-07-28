@@ -1,0 +1,13 @@
+{
+    "name": "Makeblock",
+    "keywords": "robot",
+    "description": "Makeblock is a construction platform for DIY robot",
+    "repository":
+    {
+        "type": "git",
+        "url": "https://github.com/Makeblock-official/Makeblock-Library.git"
+    },
+    "include": "makeblock",
+    "frameworks": "arduino",
+    "platforms": "atmelavr"
+}
