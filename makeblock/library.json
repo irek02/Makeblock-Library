@@ -8,6 +8,10 @@
         "url": "https://github.com/Makeblock-official/Makeblock-Library.git"
     },
     "include": "makeblock",
+    "examples": [
+        "makeblock/examples/*/*.ino",
+        "makeblock/examples/*/*/*.ino"
+    ],
     "frameworks": "arduino",
     "platforms": "atmelavr"
 }
