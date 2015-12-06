@@ -37,16 +37,22 @@ void setup()
 void loop()
 {
 
-    if (Serial.available() > 0) {
-    String str;
-    str = Serial.readStringUntil('#');
+/* Example of how to send the command from the RPi in Python:
+>>> import serial
+>>> ser = serial.Serial('/dev/ttyAMA0', 9600);
+>>> ser.write("stop#");
+*/
 
-    if (str == "go") {
-      ChangeSpeed(factor*1+minSpeed);
-      Forward();
-      delay(300);
-      Stop();
-    }
+    if (Serial.available() > 0) {
+      String str;
+      str = Serial.readStringUntil('#');
+
+      if (str == "go") {
+        ChangeSpeed(factor*1+minSpeed);
+        Forward();
+        delay(300);
+        Stop();
+      }
     
 //    Serial.print("Received: ");
 //    Serial.println(str);  
