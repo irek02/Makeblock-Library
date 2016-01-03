@@ -18,6 +18,14 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 #include <Wire.h>
+#include <Servo.h> 
+MePort port(PORT_3);
+Servo servoDriver2;
+
+int servo2pin =  port.pin1();
+int armPos = 101;
+int const ARM_UPPER_LIMIT = 140;
+int const ARM_LOWER_LIMIT = 100;
 
 MeDCMotor MotorL(M1);  
 MeDCMotor MotorR(M2);
@@ -30,7 +38,8 @@ int factor = 23;
 void setup()
 {
     infraredReceiverDecode.begin();
-
+  servoDriver2.attach(servo2pin);
+  
 }
 
 void loop()
@@ -52,10 +61,10 @@ void loop()
                TurnLeft();
                break;
           case IR_BUTTON_9:
-               ChangeSpeed(factor*9+minSpeed);
+               moveArmUp();
                break;
           case IR_BUTTON_8:
-               ChangeSpeed(factor*8+minSpeed);
+               moveArmDown();
                break;
           case IR_BUTTON_7:
                ChangeSpeed(factor*7+minSpeed);
@@ -86,7 +95,23 @@ void loop()
     }
 }
 
+void moveArmUp()
+{  
+  if (armPos > ARM_LOWER_LIMIT) {
+    servoDriver2.write(armPos);
+    armPos -= 2;
+  }   
   
+}
+
+void moveArmDown()
+{
+  if (armPos < ARM_UPPER_LIMIT) {
+    servoDriver2.write(armPos);
+    armPos++;
+  }
+  
+}
 
 void Forward()
 {
