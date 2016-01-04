@@ -27,11 +27,20 @@ boolean leftflag,rightflag;
 int minSpeed = 55;
 int factor = 23;
 
+#include <Servo.h> 
+MePort port(PORT_3);
+Servo servoDriver2;
+int servo2pin =  port.pin1();
+int armPos = 101;
+int const ARM_UPPER_LIMIT = 140;
+int const ARM_LOWER_LIMIT = 100;
+
 void setup()
 {
     infraredReceiverDecode.begin();
     Serial.begin(9600);
     establishContact();
+    servoDriver2.attach(servo2pin);
 }
 
 void loop()
@@ -40,22 +49,29 @@ void loop()
 /* Example of how to send the command from the RPi in Python:
 >>> import serial
 >>> ser = serial.Serial('/dev/ttyAMA0', 9600);
->>> ser.write("stop#");
+>>> ser.write("movearmup#");
 */
 
     if (Serial.available() > 0) {
       String str;
       str = Serial.readStringUntil('#');
 
-      if (str == "go") {
-        ChangeSpeed(factor*1+minSpeed);
-        Forward();
-        delay(300);
-        Stop();
+      if (str == "movearmup") {
+        moveArmUp();
       }
+      else if (str == "movearmdown") {
+        moveArmDown();
+      }
+
+//      if (str == "go") {
+//        ChangeSpeed(factor*1+minSpeed);
+//        Forward();
+//        delay(300);
+//        Stop();
+//      }
     
-//    Serial.print("Received: ");
-//    Serial.println(str);  
+    Serial.print("Received: ");
+    Serial.println(str);  
   }
 
   /*
@@ -116,7 +132,24 @@ void establishContact() {
     Serial.print('A');   // send a capital A
     delay(300);
   }
-}  
+}
+
+void moveArmUp()
+{  
+  if (armPos > ARM_LOWER_LIMIT) {
+    servoDriver2.write(armPos);
+    armPos--;
+  }   
+  
+}
+
+void moveArmDown()
+{
+  if (armPos < ARM_UPPER_LIMIT) {
+    servoDriver2.write(armPos);
+    armPos++;
+  } 
+}
 
 void Forward()
 {
